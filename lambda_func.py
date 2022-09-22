@@ -16,7 +16,7 @@ def lambda_handler(event, context):
         fileObj = s3.get_object(Bucket=bucketname, Key=filename)
         df = pd.read_csv(fileObj['Body'], sep=',')
         df.rename(columns={"Direction": "Category"}, inplace=True)
-        df_filtered = df[~ df['Category'].isin(["Imports", "Exports"])]
+        df_filtered = df[df['Category'].isin(["Imports", "Exports"])]
         df_filtered['Current_Match'] = pd.to_datetime(df_filtered['Current_Match'])
         df_filtered = df_filtered.sort_values(by="Current_Match")
         csv_buffer = StringIO()
